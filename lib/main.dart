@@ -1,6 +1,8 @@
 
 import 'package:flutter/material.dart';
+import 'package:tutor_app/models/user.dart';
 import 'package:tutor_app/screens/auth/sign_in_screen.dart';
+import 'package:tutor_app/screens/getting_started/education_level_screen.dart';
 
 
 void main() {
@@ -14,11 +16,11 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
+      title: 'TutorUs',
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: const SignInScreen(),
+      home: const EducationLevelScreen(selectedRole: UserRole.Teacher,),
     );
   }
 }
