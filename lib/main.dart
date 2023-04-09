@@ -1,8 +1,6 @@
-import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
-import 'package:image_picker/image_picker.dart';
-import 'package:tutor_app/screens/getting_started/getting_started_screen.dart';
+import 'package:tutor_app/screens/auth/sign_in_screen.dart';
 
 
 void main() {
@@ -20,7 +18,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: const GettingStartedScreen(),
+      home: const SignInScreen(),
     );
   }
 }

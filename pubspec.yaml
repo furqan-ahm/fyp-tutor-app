@@ -32,11 +32,12 @@ dependencies:
   cupertino_icons: ^1.0.2
   flutter:
     sdk: flutter
+  flutter_chip_tags: ^2.0.2
+  font_awesome_flutter: ^10.4.0
   image: ^4.0.15
   image_picker: ^0.8.6+2
   path_provider: ^2.0.12
   permission_handler: ^10.2.0
-
 
 dev_dependencies:
   flutter_lints: ^2.0.0

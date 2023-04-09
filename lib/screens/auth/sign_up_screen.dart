@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:tutor_app/screens/getting_started/education_level_screen.dart';
 
 import '../../constants/colors.dart';
 import '../../models/user.dart';
 import '../../utils/loading_button.dart';
 import '../../utils/validation_utils.dart';
-import '../../widgets/auth/custom_textfield.dart';
+import '../../widgets/common/custom_textfield.dart';
 
 class SignUpScreen extends StatefulWidget {
   const SignUpScreen({Key? key, required this.selectedRole}) : super(key: key);
@@ -17,15 +18,12 @@ class SignUpScreen extends StatefulWidget {
 }
 
 class _SignUpScreenState extends State<SignUpScreen> {
-
-
   TextEditingController emailCont = TextEditingController();
   TextEditingController passCont = TextEditingController();
   TextEditingController numCont = TextEditingController();
   TextEditingController nameCont = TextEditingController();
 
-
-  final _formKey=GlobalKey<FormState>();
+  final _formKey = GlobalKey<FormState>();
 
   @override
   Widget build(BuildContext context) {
@@ -156,7 +154,6 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   primaryColor: primaryColor,
                   textColor: bodyTextColor,
                   isLabelCenter: false,
-                  
                 ),
                 const SizedBox(height: 24),
                 LoadingButton(
@@ -166,9 +163,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   buttonBgColor: primaryColor,
                   buttonFontColor: Colors.white,
                   onPressed: () {
-                    if (_formKey.currentState!.validate()) {
-                      
-                    }
+                    Navigator.push(context, MaterialPageRoute(builder: (_)=>EducationLevelScreen(selectedRole: widget.selectedRole)));
+                    if (_formKey.currentState!.validate()) {}
                   },
                 ),
               ],
