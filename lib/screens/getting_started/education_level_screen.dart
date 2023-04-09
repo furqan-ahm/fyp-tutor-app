@@ -218,72 +218,100 @@ class _EducationLevelScreenState extends State<EducationLevelScreen> {
               const SizedBox(
                 height: 24,
               ),
-              // Row(
-              //   children: [
-              //     Expanded(
-              //       child: CustomFormField(
-              //         controller: subjectCont,
-              //         textFieldBgColor: greyButtonColor,
-              //         labelText: 'Subject Name',
-              //         isPassword: false,
-              //         validatorFunction: (v) {
-              //           return null;
-              //         },
-              //         primaryColor: primaryColor,
-              //         textColor: bodyTextColor,
-              //         isLabelCenter: false,
+              Row(
+                children: [
+                  Expanded(
+                    child: CustomFormField(
+                      controller: subjectCont,
+                      textFieldBgColor: greyButtonColor,
+                      labelText: 'Subject Name',
+                      isPassword: false,
+                      validatorFunction: (v) {
+                        return null;
+                      },
+                      primaryColor: primaryColor,
+                      textColor: bodyTextColor,
+                      isLabelCenter: false,
+                    ),
+                  ),
+                  const SizedBox(
+                    width: 20,
+                  ),
+                  FloatingActionButton.extended(
+                    onPressed: () {
+                      if(subjectCont.text.isNotEmpty){
+                        setState(() {
+                          subjects.add(subjectCont.text);
+                        });
+                      }
+                      subjectCont.clear();
+                    },
+                    label: const Text('Add'),
+                    elevation: 2,
+                  )
+                ],
+              ),
+              const SizedBox(
+                height: 18,
+              ),
+              Wrap(
+                children: subjects.map((e) => Container(
+                  decoration: BoxDecoration(
+                    color: accentColor,
+                    borderRadius: BorderRadius.circular(20)
+                  ),
+                  margin: const EdgeInsets.symmetric(horizontal: 10,vertical: 10),
+                  padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      GestureDetector(
+                        onTap: (){setState(() {
+                          subjects.remove(e);
+                        });},
+                        child: Icon(Icons.remove_circle_outline, color: Colors.redAccent, size: 18,),
+                      ),
+                      SizedBox(width: 5,),
+                      Text(e, style: const TextStyle(color: Colors.white),),
+                    ],
+                  ),
+                )).toList(),
+              )
+              // ChipTags(
+              //   list: subjects,
+              //   createTagOnSubmit: true,
+              //   chipColor: primaryColor,
+              //   iconColor: Colors.white,
+              //   textColor: Colors.white,
+              //   keyboardType: TextInputType.text,
+              //   decoration: InputDecoration(
+              //     filled: true,
+              //     fillColor: greyButtonColor,
+              //     hintText: 'Add Subjects',
+              //     errorBorder: const OutlineInputBorder(
+              //       borderSide: BorderSide(
+              //         color: primaryColor,
+              //       ),
+              //       borderRadius: BorderRadius.all(
+              //         Radius.circular(8),
               //       ),
               //     ),
-              //     const SizedBox(
-              //       width: 20,
+              //     focusedBorder: OutlineInputBorder(
+              //       borderSide: BorderSide(
+              //         color: bodyTextColor.withOpacity(0.5),
+              //       ),
+              //       borderRadius: const BorderRadius.all(
+              //         Radius.circular(8),
+              //       ),
               //     ),
-              //     FloatingActionButton.extended(
-              //       onPressed: () {
-
-              //       },
-              //       label: const Text('Add'),
-              //       elevation: 2,
-              //     )
-              //   ],
+              //     enabledBorder: const OutlineInputBorder(
+              //       borderSide: BorderSide.none,
+              //       borderRadius: BorderRadius.all(
+              //         Radius.circular(8),
+              //       ),
+              //     ),
+              //   ),
               // ),
-              // const SizedBox(
-              //   height: 18,
-              // ),
-              ChipTags(
-                list: subjects,
-                createTagOnSubmit: true,
-                chipColor: primaryColor,
-                iconColor: Colors.white,
-                textColor: Colors.white,
-                keyboardType: TextInputType.text,
-                decoration: InputDecoration(
-                  filled: true,
-                  fillColor: greyButtonColor,
-                  hintText: 'Add Subjects',
-                  errorBorder: const OutlineInputBorder(
-                    borderSide: BorderSide(
-                      color: primaryColor,
-                    ),
-                    borderRadius: BorderRadius.all(
-                      Radius.circular(8),
-                    ),
-                  ),
-                  focusedBorder: OutlineInputBorder(
-                    borderSide: BorderSide(
-                      color: bodyTextColor.withOpacity(0.5),
-                    ),
-                    borderRadius: const BorderRadius.all(
-                      Radius.circular(8),
-                    ),
-                  ),
-                  enabledBorder: const OutlineInputBorder(
-                    borderSide: BorderSide.none,
-                    borderRadius: BorderRadius.all(
-                      Radius.circular(8),
-                    ),
-                  ),
-                ),
-              ),
             ],
           ),
         ),
