@@ -1,7 +1,11 @@
 import 'package:floating_bottom_navigation_bar/floating_bottom_navigation_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:tutor_app/constants/colors.dart';
+import 'package:tutor_app/screens/tutor/assignments_screen.dart';
 import 'package:tutor_app/screens/tutor/home_screen.dart';
+import 'package:tutor_app/screens/tutor/inbox_screen.dart';
+import 'package:tutor_app/screens/tutor/profile_screen.dart';
+import 'package:tutor_app/screens/tutor/students_screen.dart';
 import 'package:tutor_app/widgets/common/custom_appbar.dart';
 
 class TutorDashboardScreen extends StatefulWidget {
@@ -12,12 +16,17 @@ class TutorDashboardScreen extends StatefulWidget {
 }
 
 class _TutorDashboardScreenState extends State<TutorDashboardScreen> {
-  int currentIndex = 0;
+  int currentIndex = 2;
+
+  
+
+  static const List<Widget> screens=[InboxScreen(),StudentsScreen(),HomeScreen(),AssignmentsScreen(),ProfileScreen()];
+
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: HomeScreen(),
+      body: screens[currentIndex],
       backgroundColor: baseColor,
       extendBody: true,
       appBar: CustomAppBar(
@@ -29,11 +38,12 @@ class _TutorDashboardScreenState extends State<TutorDashboardScreen> {
       ),
       bottomNavigationBar: FloatingNavbar(
         itemBorderRadius: 16,
+        elevation: 20,
         borderRadius: 16,
-        backgroundColor: primaryColor,
-        selectedItemColor: primaryColor,
-        unselectedItemColor: Colors.white,
-        selectedBackgroundColor: Colors.white,
+        backgroundColor: Colors.white,
+        selectedItemColor: Colors.white,
+        unselectedItemColor: Colors.black,
+        selectedBackgroundColor: Colors.blue,
         onTap: (int val) {
           setState(() {
             currentIndex=val;
