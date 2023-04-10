@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:tutor_app/models/user.dart';
 import 'package:tutor_app/screens/auth/sign_in_screen.dart';
 import 'package:tutor_app/screens/getting_started/education_level_screen.dart';
+import 'package:tutor_app/screens/tutor/tutor_dashboard_screen.dart';
 
 
 void main() {
@@ -17,10 +18,11 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'TutorUs',
+      debugShowCheckedModeBanner: false,
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: const EducationLevelScreen(selectedRole: UserRole.Teacher,),
+      home: const TutorDashboardScreen(),
     );
   }
 }

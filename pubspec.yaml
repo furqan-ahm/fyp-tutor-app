@@ -31,6 +31,7 @@ environment:
 dependencies:
   cupertino_icons: ^1.0.2
   dropdown_search: ^5.0.6
+  floating_bottom_navigation_bar: ^1.5.2
   flutter:
     sdk: flutter
   flutter_chip_tags: ^2.0.2
