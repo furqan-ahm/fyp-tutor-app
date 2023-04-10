@@ -9,6 +9,7 @@ class CustomAppBar extends StatelessWidget with PreferredSizeWidget {
     Key? key,
     this.isElevated = false,
     required this.title,
+    this.centerTitle=false,
     this.foregroundColor = bodyTextColor,
     this.backgroundColor = Colors.white,
     this.trailing,
@@ -24,6 +25,8 @@ class CustomAppBar extends StatelessWidget with PreferredSizeWidget {
       //: preferredSize = bottom==null?const Size.fromHeight(56):Size.fromHeight(56+bottom.preferredSize.height),super(key: key);
       //This implementation removes makes widget non const but is more dynamic
       //
+
+  final bool centerTitle;
   final String title;
   final bool isElevated;
   final Widget? trailing;
@@ -39,6 +42,7 @@ class CustomAppBar extends StatelessWidget with PreferredSizeWidget {
     return AppBar(
       automaticallyImplyLeading: false,
       elevation: isElevated ? 2 : 0,
+      centerTitle: centerTitle,
       backgroundColor: backgroundColor,
       foregroundColor: foregroundColor,
       bottom: bottom,
