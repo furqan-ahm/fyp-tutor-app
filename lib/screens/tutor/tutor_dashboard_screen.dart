@@ -18,6 +18,7 @@ class _TutorDashboardScreenState extends State<TutorDashboardScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: HomeScreen(),
+      backgroundColor: baseColor,
       extendBody: true,
       appBar: CustomAppBar(
         title: 'Dashboard',
@@ -44,7 +45,7 @@ class _TutorDashboardScreenState extends State<TutorDashboardScreen> {
           FloatingNavbarItem(icon: Icons.people, title: 'Students'),
           FloatingNavbarItem(icon: Icons.home,),
           FloatingNavbarItem(icon: Icons.edit_document, title: 'Assignments '),
-          FloatingNavbarItem(icon: Icons.settings, title: 'Settings'),
+          FloatingNavbarItem(icon: Icons.person_2_rounded, title: 'Profile'),
         ],
       ),
     );
