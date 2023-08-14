@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:tutor_app/constants/colors.dart';
 
+import '../../widgets/common/custom_appbar.dart';
+
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
 
@@ -14,6 +16,12 @@ class _HomeScreenState extends State<HomeScreen> {
     return SingleChildScrollView(
       child: Column(
         children: [
+          const CustomAppBar(
+            title: 'Dashboard',
+            backgroundColor: Colors.transparent,
+            canPop: false,
+            centerTitle: true,
+          ),
           Padding(
             padding: const EdgeInsets.all(8.0),
             child: Row(
@@ -34,13 +42,15 @@ class _HomeScreenState extends State<HomeScreen> {
                                   text: const TextSpan(
                                       text: 'Welcome back!',
                                       style: TextStyle(
-                                          fontSize: 20, fontWeight: FontWeight.w700, color: Colors.black),
+                                          fontSize: 20,
+                                          fontWeight: FontWeight.w700,
+                                          color: Colors.black),
                                       children: [
                                         TextSpan(
-                                            text:
-                                                ' Anwar',
-                                            style:
-                                                TextStyle(color: primaryColor, fontSize: 18)),
+                                            text: ' Anwar',
+                                            style: TextStyle(
+                                                color: primaryColor,
+                                                fontSize: 18)),
                                       ]),
                                 ),
                               )),

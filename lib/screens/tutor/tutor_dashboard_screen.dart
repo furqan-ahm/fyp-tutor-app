@@ -29,13 +29,6 @@ class _TutorDashboardScreenState extends State<TutorDashboardScreen> {
       body: screens[currentIndex],
       backgroundColor: baseColor,
       extendBody: true,
-      appBar: CustomAppBar(
-        title: 'Dashboard',
-        backgroundColor: Colors.transparent,
-        canPop: false,
-        centerTitle: true,
-        leading: IconButton(onPressed: (){}, icon: const Icon(Icons.menu)),
-      ),
       bottomNavigationBar: FloatingNavbar(
         itemBorderRadius: 16,
         elevation: 20,

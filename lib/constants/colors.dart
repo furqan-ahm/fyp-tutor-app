@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 const baseColor = Color(0xFFF5F5F5);
 const primaryColor = Colors.blue;
-const accentColor = Colors.deepPurpleAccent;
+const accentColor = Color(0xff00E0FF);
 const bodyTextColor = Color(0xFF1E1C1C);
 const headingColor = Color(0xFFFFFFFF);
 

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:tutor_app/screens/auth/select_role_screen.dart';
+import 'package:tutor_app/screens/tutor/tutor_dashboard_screen.dart';
 
 import '../../constants/colors.dart';
 import '../../utils/loading_button.dart';
@@ -76,6 +77,7 @@ class _SignInScreenState extends State<SignInScreen> {
                     buttonBgColor: primaryColor,
                     buttonFontColor: Colors.white,
                     onPressed: () {
+                      Navigator.push(context, MaterialPageRoute(builder: (_)=>TutorDashboardScreen()));
                       if (formKey.currentState!.validate()) {}
                     },
                   ),
