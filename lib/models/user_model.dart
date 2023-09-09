@@ -12,7 +12,6 @@ class AppUser {
   String nickname;
   String email;
   UserType userType;
-  // Map<String, Address> address;
   String profilePictureURL;
   String? notificationToken;
   String gender;
