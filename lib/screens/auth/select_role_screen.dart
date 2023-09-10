@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:tutor_app/screens/auth/sign_up_screen.dart';
-import 'package:tutor_app/utils/loading_button.dart';
+import 'package:tutor_app/widgets/loading_button.dart';
 import 'package:tutor_app/widgets/common/custom_appbar.dart';
 
-import '../../models/user.dart';
+import '../../models/user_model.dart';
 
 class SelectRoleScreen extends StatefulWidget {
   const SelectRoleScreen({Key? key}) : super(key: key);
@@ -19,7 +19,7 @@ class _SelectRoleScreenState extends State<SelectRoleScreen> {
   Size get size => MediaQuery.of(context).size;
 
 
-  UserRole selectedRole=UserRole.Student;
+  UserType selectedRole=UserType.Student;
 
   @override
   Widget build(BuildContext context) {
@@ -36,22 +36,22 @@ class _SelectRoleScreenState extends State<SelectRoleScreen> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Material(
-                    color: selectedRole==UserRole.Student?Colors.blue:Colors.white,
+                    color: selectedRole==UserType.Student?Colors.blue:Colors.white,
                     shape: const CircleBorder(),
-                    elevation: selectedRole==UserRole.Student?10:0,
+                    elevation: selectedRole==UserType.Student?10:0,
                     child: InkWell(
                       customBorder: const CircleBorder(),
                       onTap: () {
                         setState(() {
-                          selectedRole=UserRole.Student;
+                          selectedRole=UserType.Student;
                         });
                       },
                       child: SizedBox(
                           width: double.infinity,
                           child: Hero(
-                            tag: UserRole.Student.name,
+                            tag: UserType.Student.name,
                             child: Image.asset(
-                              'assets/${UserRole.Student.name}.png',
+                              'assets/${UserType.Student.name}.png',
                               height: size.height / 3,
                             ),
                           )),
@@ -61,23 +61,23 @@ class _SelectRoleScreenState extends State<SelectRoleScreen> {
                     height: 40,
                   ),
                   Material(
-                    color: selectedRole==UserRole.Teacher?Colors.blue:Colors.white,
+                    color: selectedRole==UserType.Teacher?Colors.blue:Colors.white,
                     shape: const CircleBorder(),
-                    elevation: selectedRole==UserRole.Teacher?10:0,
+                    elevation: selectedRole==UserType.Teacher?10:0,
                     child: InkWell(
                       customBorder: const CircleBorder(),
                       borderRadius: BorderRadius.circular(20),
                       onTap: () {
                         setState(() {
-                          selectedRole=UserRole.Teacher;
+                          selectedRole=UserType.Teacher;
                         });
                       },
                       child: SizedBox(
                           width: double.infinity,
                           child: Hero(
-                            tag: UserRole.Teacher.name,
+                            tag: UserType.Teacher.name,
                             child: Image.asset(
-                              'assets/${UserRole.Teacher.name}.png',
+                              'assets/${UserType.Teacher.name}.png',
                               height: size.height / 3,
                             ),
                           )),

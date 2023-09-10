@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:tutor_app/providers/auth_provider.dart';
 import 'package:tutor_app/screens/auth/select_role_screen.dart';
 import 'package:tutor_app/screens/tutor/tutor_dashboard_screen.dart';
+import 'package:tutor_app/widgets/common/custom_button.dart';
 
 import '../../constants/colors.dart';
-import '../../utils/loading_button.dart';
+import '../../widgets/loading_button.dart';
 import '../../utils/validation_utils.dart';
 import '../../widgets/common/custom_textfield.dart';
 import '../../widgets/common/max_sized_container.dart';
@@ -40,7 +43,7 @@ class _SignInScreenState extends State<SignInScreen> {
                   const Spacer(),
                   const SizedBox(height: 24),
                   Text(
-                    'Sign In',
+                    'Welcome!',
                     style: Theme.of(context).textTheme.headlineMedium,
                   ),
                   const SizedBox(height: 24),
@@ -70,15 +73,14 @@ class _SignInScreenState extends State<SignInScreen> {
                     isLabelCenter: false,
                   ),
                   const SizedBox(height: 24),
-                  LoadingButton(
-                    isLoading: false,
+                  CustomButton(
+                    buttonText: 'Login',
                     fullWidth: true,
-                    buttonText: 'Sign In',
-                    buttonBgColor: primaryColor,
-                    buttonFontColor: Colors.white,
-                    onPressed: () {
-                      Navigator.push(context, MaterialPageRoute(builder: (_)=>TutorDashboardScreen()));
-                      if (formKey.currentState!.validate()) {}
+                    onPressed: ()async{
+                      if (formKey.currentState!.validate()) {
+                        return await AuthProvider.of(context).signIn(emailCont.text, passCont.text, context, rememberMe: true);
+                        
+                      }
                     },
                   ),
                   const SizedBox(height: 24),
