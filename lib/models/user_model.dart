@@ -21,7 +21,19 @@ class AppUser {
   bool profileFilled;
   String? selectedAddress;
 
+
+  List<String> subjects;
+
+  String educationLevel;
+  String institute;
+
+
   bool get isGuest => this == guestUser;
+
+
+  bool get isStudent=>userType==UserType.Student;
+
+  bool get isTutor=>!isStudent;
 
   static isSelectedAddress(String key, String? selectedAddress) =>
       key == selectedAddress;
@@ -44,13 +56,19 @@ class AppUser {
       this.contactNum = '',
       this.profilePictureURL = '',
       dateOfBirth,
-      this.selectedAddress = ''})
-      : dateOfBirth = dateOfBirth ?? DateTime(1947, 8, 14);
+      this.educationLevel='',
+      this.institute='',
+      this.subjects=const [],
+      this.selectedAddress = ''});
 
   static AppUser fromMap(Map<String, dynamic> data) => AppUser(
         uid: data['uid'],
         name: data['name'],
+        educationLevel: data['education_level']??'',
+        institute: data['institute']??'',
+        subjects: ((data['subjects'] as List?)??[]).map((e) => e.toString()).toList(),
         userType: UserType.values[data['type']],
+        profileFilled: data['profile_filled']??false,
         numberVerified: data['numberVerified']??false,
         nickname: data['nickname']??'',
         notificationToken: data['notification_token'],
@@ -71,6 +89,7 @@ class AppUser {
   Map<String, dynamic> toMap() => {
         'uid': uid,
         'type':userType.index,
+        'profile_filled':profileFilled,
         'name': name,
         'numberVerified':numberVerified,
         'nickname': nickname,
@@ -78,18 +97,21 @@ class AppUser {
         //'address': address.map((key, value) => MapEntry(key, value.toMap())),
         'email': email,
         'gender': gender,
+        'subjects':subjects,
+        'education_level':educationLevel,
         'phone': contactNum,
         'photoUrl': profilePictureURL,
-        'dob': Timestamp.fromDate(dateOfBirth ?? DateTime(1947, 8, 14)),
+        'dob': dateOfBirth!=null?Timestamp.fromDate(dateOfBirth!):null,
         'selectedAddress': selectedAddress,
       };
 
-  dynamic get dobString =>
+  dynamic get dobString =>dateOfBirth==null?'N/A':
       '${dateOfBirth?.day}/${dateOfBirth?.month}/${dateOfBirth?.year}';
   AppUser copyWith({
     String? name,
     String? address,
     String? phone,
+    bool? profile_filled,
     String? nickname,
     DateTime? dob,
     String? photoUrl,
@@ -97,10 +119,14 @@ class AppUser {
       AppUser(
           uid: uid,
           userType: userType,
+          subjects: subjects,
+          educationLevel: educationLevel,
+          institute: institute,
           numberVerified: numberVerified,
           notificationToken: notificationToken,
           name: name ?? this.name,
           email: email,
+          profileFilled: profile_filled??profileFilled,
           dateOfBirth: dob??dateOfBirth,
           profilePictureURL: photoUrl??profilePictureURL,
           nickname: nickname?? this.nickname,
@@ -112,6 +138,9 @@ class AppUser {
 
 AppUser guestUser = AppUser(
   uid: 'guestuid',
+  institute: '',
+  educationLevel: '',
+  subjects: [],
   userType: UserType.Student,
   name: 'GUEST ACCOUNT',
   numberVerified: false,
