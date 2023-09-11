@@ -50,7 +50,7 @@ class FirebaseAuthRepository {
     return await firestore
         .collection(FirebaseCollections.usersCollection)
         .doc(user.uid)
-        .set(user.toMap())
+        .update(user.toMap())
         .then((document) {
       return user;
     });

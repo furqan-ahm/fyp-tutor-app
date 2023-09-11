@@ -2,6 +2,7 @@ import 'dart:ui';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/widgets.dart';
+import 'package:tutor_app/models/session_model.dart';
 import 'package:tutor_app/models/tutorship_model.dart';
 import 'package:tutor_app/models/tutorship_offer_model.dart';
 import 'package:tutor_app/models/user_model.dart';
@@ -31,14 +32,26 @@ class FirestoreRepository {
     });
   }
 
+  static Future<dynamic> createSession(Map<String, dynamic> data) async {
+    try {
+      var res=await _firestore.collection('sessions').add(data);
+      var doc=(await res.get());
+      return Session.fromMap(doc.id, doc.data()!);
+    } catch (e) {
+      print(e);
+      return e.toString();
+    }
+  }
+
   static Stream<List<TutorshipOffer>> getTutorshipOffersStream(String tutorID) {
     return _firestore
         .collection(FirebaseCollections.usersCollection)
         .doc(tutorID)
         .collection('offers')
         .snapshots()
-        .map((event) =>
-            event.docs.map((e) => TutorshipOffer.fromMap(e.id,e.data())).toList());
+        .map((event) => event.docs
+            .map((e) => TutorshipOffer.fromMap(e.id, e.data()))
+            .toList());
   }
 
   static Stream<List<Tutorship>> getTutorshipsStream(String uid) {
@@ -50,20 +63,36 @@ class FirestoreRepository {
             event.docs.map((e) => Tutorship.fromMap(e.id, e.data())).toList());
   }
 
+  static Future<List<AppUser>> getStudents(String uid) async {
+    return (await _firestore
+            .collection(FirebaseCollections.tutorshipCollection)
+            .where('members', arrayContains: uid)
+            .get())
+        .docs
+        .map((e) => AppUser.fromMap(e.data()['student']))
+        .toList();
+  }
 
   // static deleteTutorshipOffer(String tutorID, String offerID){
 
   // }
 
-  static Future<bool> startTutorship(String offerID, AppUser student, AppUser tutor)async{
+  static Future<bool> startTutorship(
+      String offerID, AppUser student, AppUser tutor) async {
     try {
-      await _firestore.collection(FirebaseCollections.usersCollection).doc(tutor.uid).collection('offers').doc(offerID).update({'accepted':true});
+      await _firestore
+          .collection(FirebaseCollections.usersCollection)
+          .doc(tutor.uid)
+          .collection('offers')
+          .doc(offerID)
+          .update({'accepted': true});
       await _firestore.collection(FirebaseCollections.tutorshipCollection).add({
-      'members':[student.uid, tutor.uid],
-      'student':student.toMap(),
-      'tutor':tutor.toMap(),
-      'subjects':student.subjects
-    }); 
+        'members': [student.uid, tutor.uid],
+        'student': student.toMap(),
+        'tutor': tutor.toMap(),
+        'start_date': Timestamp.now(),
+        'subjects': student.subjects
+      });
     } catch (e) {
       print(e);
       return false;
@@ -72,15 +101,24 @@ class FirestoreRepository {
     return true;
   }
 
+  static Stream<List<Session>> getSessionStream(String uid) => _firestore
+      .collection('sessions')
+      .where('participants', arrayContains: uid)
+      .snapshots()
+      .map((event) =>
+          event.docs.map((e) => Session.fromMap(e.id, e.data())).toList());
 
-  static Future<dynamic> getSuggestedTutors(
-          AppUser student) async =>
+  static Future<dynamic> getSuggestedTutors(AppUser student) async =>
       (await _firestore
               .collection(FirebaseCollections.usersCollection)
               .where('type', isEqualTo: 0)
               .where('subjects', arrayContainsAny: student.subjects)
               .get())
-          .docs.where((element) => [...(element.data()['student_ids']??[])].fold(true, (previousValue, element) => previousValue&&element!=student.uid))
+          .docs
+          .where((element) => [...(element.data()['student_ids'] ?? [])].fold(
+              true,
+              (previousValue, element) =>
+                  previousValue && element != student.uid))
           .map((e) => Tutor.fromMap(e.data()))
           .toList();
 

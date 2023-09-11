@@ -19,3 +19,17 @@ Future<String?> uploadProfileImage(String uid, String imagePath) async {
 
   return null;
 }
+Future<String?> uploadFile(String uid, File file) async {
+  try {
+
+    final ref = storageRef.ref().child('users/$uid/${file.path.split('/').last}');
+
+    await ref.putFile(file);
+    final downloadURL = await ref.getDownloadURL();
+    return downloadURL;
+  } catch (e) {
+    print(e);
+  }
+
+  return null;
+}

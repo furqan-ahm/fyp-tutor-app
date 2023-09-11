@@ -21,6 +21,9 @@ class TutorshipProvider extends ChangeNotifier{
   Stream<List<Tutorship>> tutorshipStreams(BuildContext context)=>FirestoreRepository.getTutorshipsStream(AuthProvider.of(context).currentUser.uid);
 
 
+
+  Future<List<AppUser>> getStudents(BuildContext context)=>FirestoreRepository.getStudents(AuthProvider.of(context).currentUser.uid);
+
   Future createTutoship(String offerID, AppUser student, AppUser tutor)async{
     return await FirestoreRepository.startTutorship(offerID, student, tutor);
   }
