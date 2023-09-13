@@ -9,6 +9,9 @@ const headingColor = Color(0xFFFFFFFF);
 const onBoardDotColor = Color(0xFFDBE6F0);
 const greyButtonColor = Color(0xFFEFEFEF);
 
+
+LinearGradient gradient=const LinearGradient(colors: [accentColor, primaryColor], begin: Alignment.topCenter, end: Alignment.bottomCenter);
+
 const isBlack = true;
 
 //font faimly: Poppins
