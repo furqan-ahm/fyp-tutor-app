@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:ficonsax/ficonsax.dart';
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import '../constants/colors.dart';
@@ -25,6 +26,12 @@ class Utils {
 
 
   static to12Hour(int hour)=>hour>12?hour-12:hour;
+
+
+  static Future<PlatformFile?> pickFile({bool forSession=false})async{
+    var res=await FilePicker.platform.pickFiles(allowMultiple: false, type: FileType.custom  , allowedExtensions: ['pdf','ppt','pptx']);
+    return res?.files.first;
+  }
 
   static Future<String?> getImage(ImageSource source) async {
     XFile? file = await picker.pickImage(source: source);
