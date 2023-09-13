@@ -1,20 +1,24 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:tutor_app/utils/validation_utils.dart';
 
-import '../../constants/colors.dart';
+import '../../constants/colors.dart' as colors;
+import '../../utils/mixins_classes.dart';
 
 @immutable
 class CustomFormField extends StatefulWidget {
   // const CustomFormField({Key? key}) : super(key: key);
   final String labelText;
   bool isPassword;
-  final String? Function(String?) validatorFunction;
+  final String? Function(String?)? validatorFunction;
   final TextEditingController? controller;
   final Color primaryColor;
+  final int? minLines;
   final Color textColor;
   final Color textFieldBgColor;
   final bool isLabelCenter;
+  final bool? enabled;
   Widget? suffixWidget;
   Widget? prefixWidget;
   int? maxLength;
@@ -24,15 +28,17 @@ class CustomFormField extends StatefulWidget {
     this.maxLength,
     super.key,
     required this.labelText,
-    required this.isPassword,
+    this.isPassword = false,
     this.controller,
+    this.minLines,
     this.suffixWidget,
     this.prefixWidget,
-    required this.validatorFunction,
-    required this.primaryColor,
-    required this.textColor,
-    required this.textFieldBgColor,
-    required this.isLabelCenter,
+    this.enabled,
+    this.validatorFunction = ValidationUtils.validateTextFormFieldForEmptyInput,
+    this.primaryColor=colors.primaryColor,
+    this.textColor = Colors.black,
+    this.textFieldBgColor = colors.greyButtonColor,
+    this.isLabelCenter = false,
   });
 
   @override
@@ -49,10 +55,13 @@ class _CustomFormFieldState extends State<CustomFormField> {
         Radius.circular(8),
       ),
       elevation: 1,
-      shadowColor: bodyTextColor.withOpacity(0.7),
+      shadowColor: colors.bodyTextColor.withOpacity(0.7),
       child: TextFormField(
+        minLines: widget.minLines,
         controller: widget.controller,
         obscureText: widget.isPassword,
+        enableInteractiveSelection: (widget.enabled ?? true),
+        focusNode: (widget.enabled ?? true) ? null : AlwaysDisabledFocusNode(),
         validator: widget.validatorFunction,
         style: Theme.of(context).textTheme.bodyLarge!.copyWith(
               color: widget.textColor,
