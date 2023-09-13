@@ -1,15 +1,19 @@
 import 'package:dropdown_search/dropdown_search.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_chip_tags/flutter_chip_tags.dart';
 import 'package:tutor_app/constants/degrees.dart';
-import 'package:tutor_app/models/user.dart';
+import 'package:tutor_app/models/user_model.dart';
+import 'package:tutor_app/providers/auth_provider.dart';
+import 'package:tutor_app/screens/student/student_dashboard_screen.dart';
 import 'package:tutor_app/screens/tutor/tutor_dashboard_screen.dart';
+import 'package:tutor_app/utils/utils.dart';
+import 'package:tutor_app/widgets/common/custom_button.dart';
+import 'package:tutor_app/widgets/common/min_sized_container.dart';
 
 import '../../constants/colors.dart';
 import '../../widgets/common/custom_textfield.dart';
 
 class EducationLevelScreen extends StatefulWidget {
-  final UserRole selectedRole;
+  final UserType selectedRole;
 
   const EducationLevelScreen({Key? key, required this.selectedRole})
       : super(key: key);
@@ -31,32 +35,49 @@ class _EducationLevelScreenState extends State<EducationLevelScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      floatingActionButton: FloatingActionButton.extended(onPressed: (){Navigator.push(context, MaterialPageRoute(builder: (_)=>const TutorDashboardScreen()));}, label: const Text('Continue')),
+      floatingActionButton: Visibility(
+        visible: MediaQuery.of(context).viewInsets.bottom == 0.0,
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 12),
+          child: CustomButton(
+            fullWidth: true,
+            buttonText: 'Continue',
+            onPressed: () async {
+              if (selectedEducation == null ||
+                  instituteCont.text.isEmpty ||
+                  subjects.isEmpty) {
+                print(selectedEducation == null);
+                Utils.showSnackbar(
+                    'Education Details are required to proceed', context);
+                return;
+              }
+              await AuthProvider.of(context)
+                  .setEducationDetails(
+                      selectedEducation!, instituteCont.text, subjects)
+                  .then((value) {
+                Navigator.pushAndRemoveUntil(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) =>
+                          AuthProvider.of(context).currentUser.isTutor
+                              ? const TutorDashboardScreen()
+                              : const StudentDashboardScreen(),
+                    ),
+                    (route) => false);
+              });
+            },
+          ),
+        ),
+      ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
       body: SafeArea(
         child: SingleChildScrollView(
-          child: Padding(
+          child: MinSizedContainer(
             padding: const EdgeInsets.symmetric(horizontal: 24.0),
+            safePadding: MediaQuery.of(context).padding,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const SizedBox(
-                  height: 20,
-                ),
-                IconButton(
-                  // to remove default padding of the icon button
-                  padding: EdgeInsets.zero,
-                  // You have to pass the empty constrains because, by default, the IconButton widget assumes a minimum size of 48px.
-                  constraints: const BoxConstraints(),
-                  //
-                  icon: const Icon(
-                    Icons.arrow_back_ios,
-                    color: bodyTextColor,
-                    size: 20,
-                  ),
-                  onPressed: () {
-                    Navigator.pop(context);
-                  },
-                ),
                 const SizedBox(height: 24),
                 Row(
                   children: [
@@ -93,7 +114,7 @@ class _EducationLevelScreenState extends State<EducationLevelScreen> {
                   ],
                 ),
                 const SizedBox(height: 24),
-                widget.selectedRole == UserRole.Teacher
+                widget.selectedRole == UserType.Teacher
                     ? Material(
                         borderRadius: const BorderRadius.all(
                           Radius.circular(8),
@@ -105,7 +126,8 @@ class _EducationLevelScreenState extends State<EducationLevelScreen> {
                           items: degrees,
                           popupProps: PopupProps.menu(
                             showSearchBox: true,
-                            containerBuilder: (context, popupWidget) => Container(
+                            containerBuilder: (context, popupWidget) =>
+                                Container(
                               color: greyButtonColor,
                               child: popupWidget,
                             ),
@@ -116,14 +138,18 @@ class _EducationLevelScreenState extends State<EducationLevelScreen> {
                             fillColor: greyButtonColor,
                             contentPadding:
                                 const EdgeInsets.only(left: 12, right: 12),
-                            labelStyle:
-                                Theme.of(context).textTheme.bodyMedium!.copyWith(
-                                      color: bodyTextColor.withOpacity(0.5),
-                                    ),
-                            floatingLabelStyle:
-                                Theme.of(context).textTheme.bodyMedium!.copyWith(
-                                      color: bodyTextColor.withOpacity(0.5),
-                                    ),
+                            labelStyle: Theme.of(context)
+                                .textTheme
+                                .bodyMedium!
+                                .copyWith(
+                                  color: bodyTextColor.withOpacity(0.5),
+                                ),
+                            floatingLabelStyle: Theme.of(context)
+                                .textTheme
+                                .bodyMedium!
+                                .copyWith(
+                                  color: bodyTextColor.withOpacity(0.5),
+                                ),
                             label: const Text(
                               "Degree Attained",
                             ),
@@ -150,7 +176,11 @@ class _EducationLevelScreenState extends State<EducationLevelScreen> {
                               ),
                             ),
                           )),
-                          onChanged: (val) {},
+                          onChanged: (val) {
+                            setState(() {
+                              selectedEducation = val;
+                            });
+                          },
                         ),
                       )
                     : Material(
@@ -240,8 +270,9 @@ class _EducationLevelScreenState extends State<EducationLevelScreen> {
                       width: 20,
                     ),
                     FloatingActionButton.extended(
+                      heroTag: 'add',
                       onPressed: () {
-                        if(subjectCont.text.isNotEmpty){
+                        if (subjectCont.text.isNotEmpty) {
                           setState(() {
                             subjects.add(subjectCont.text);
                           });
@@ -257,28 +288,43 @@ class _EducationLevelScreenState extends State<EducationLevelScreen> {
                   height: 18,
                 ),
                 Wrap(
-                  children: subjects.map((e) => Container(
-                    decoration: BoxDecoration(
-                      gradient: LinearGradient(colors: [primaryColor,accentColor]),
-                      borderRadius: BorderRadius.circular(20)
-                    ),
-                    margin: const EdgeInsets.symmetric(horizontal: 10,vertical: 10),
-                    padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
-                    child: Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        GestureDetector(
-                          onTap: (){setState(() {
-                            subjects.remove(e);
-                          });},
-                          child: Icon(Icons.remove_circle_outline, color: Colors.redAccent, size: 18,),
-                        ),
-                        SizedBox(width: 5,),
-                        Text(e, style: const TextStyle(color: Colors.white),),
-                      ],
-                    ),
-                  )).toList(),
-                )
+                  children: subjects
+                      .map((e) => Container(
+                            decoration: BoxDecoration(
+                                gradient: const LinearGradient(
+                                    colors: [primaryColor, accentColor]),
+                                borderRadius: BorderRadius.circular(20)),
+                            margin: const EdgeInsets.symmetric(
+                                horizontal: 10, vertical: 10),
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 10, vertical: 10),
+                            child: Row(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                GestureDetector(
+                                  onTap: () {
+                                    setState(() {
+                                      subjects.remove(e);
+                                    });
+                                  },
+                                  child: const Icon(
+                                    Icons.remove_circle_outline,
+                                    color: Colors.redAccent,
+                                    size: 18,
+                                  ),
+                                ),
+                                const SizedBox(
+                                  width: 5,
+                                ),
+                                Text(
+                                  e,
+                                  style: const TextStyle(color: Colors.white),
+                                ),
+                              ],
+                            ),
+                          ))
+                      .toList(),
+                ),
                 // ChipTags(
                 //   list: subjects,
                 //   createTagOnSubmit: true,

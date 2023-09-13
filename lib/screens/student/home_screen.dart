@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 import 'package:tutor_app/constants/colors.dart';
-import 'package:tutor_app/providers/auth_provider.dart';
-import 'package:tutor_app/screens/tutor/create_session_screen.dart';
+import 'package:tutor_app/screens/student/tutors/find_tutor_screen.dart';
 import 'package:tutor_app/widgets/session_list.dart';
 
 import '../../widgets/common/custom_appbar.dart';
@@ -39,25 +37,44 @@ class _HomeScreenState extends State<HomeScreen> {
                             horizontal: 8, vertical: 4),
                         child: AspectRatio(
                           aspectRatio: 17 / 12,
-                          child: Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: Center(
-                                child: RichText(
-                                  text: TextSpan(
-                                      text: 'Welcome back!',
-                                      style: const TextStyle(
-                                          fontSize: 20,
-                                          fontWeight: FontWeight.w700,
-                                          color: Colors.black),
-                                      children: [
-                                        TextSpan(
-                                            text: Provider.of<AuthProvider>(context).currentUser.name.split(' ').first,
-                                            style: const TextStyle(
-                                                color: primaryColor,
-                                                fontSize: 18)),
-                                      ]),
-                                ),
-                              )),
+                          child: Material(
+                            borderRadius: BorderRadius.circular(8),
+                            elevation: 4,
+                            child: InkWell(
+                              borderRadius: BorderRadius.circular(8),
+                              onTap: () {},
+                              child: Row(
+                                children: [
+                                  Expanded(
+                                    child: Center(
+                                      child: Column(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        children: const [
+                                          Text(
+                                            'Review',
+                                            style: TextStyle(
+                                                fontSize: 14,
+                                                fontWeight: FontWeight.w600),
+                                          ),
+                                          Text(
+                                            'Assignments',
+                                            style: TextStyle(
+                                                fontSize: 14,
+                                                fontWeight: FontWeight.w600),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                                  Expanded(
+                                      child: Image.asset(
+                                    'assets/performance.png',
+                                  ))
+                                ],
+                              ),
+                            ),
+                          ),
                         ),
                       ),
                       Padding(
@@ -80,7 +97,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                             MainAxisAlignment.center,
                                         children: const [
                                           Text(
-                                            'Create a',
+                                            'Join a',
                                             style: TextStyle(
                                                 fontSize: 14,
                                                 fontWeight: FontWeight.w600),
@@ -118,22 +135,35 @@ class _HomeScreenState extends State<HomeScreen> {
                         child: InkWell(
                           borderRadius: BorderRadius.circular(8),
                           onTap: () {
-                            Navigator.push(context, MaterialPageRoute(builder:(context) => const CreateSessionScreen(),));
+                            Navigator.push(context, MaterialPageRoute(builder:(context) => const FindTutorScreen(),));
                           },
                           child: Column(
                             mainAxisAlignment: MainAxisAlignment.end,
                             children: [
-                              const Text(
-                                'Schedule a',
-                                style: TextStyle(
-                                    fontSize: 14, fontWeight: FontWeight.w600),
+                              Expanded(
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.end,
+                                  children: const [
+                                    Text(
+                                      'Look for',
+                                      style: TextStyle(
+                                          fontSize: 14,
+                                          fontWeight: FontWeight.w600),
+                                    ),
+                                    Text(
+                                      'New Tutors',
+                                      style: TextStyle(
+                                          fontSize: 14,
+                                          fontWeight: FontWeight.w600),
+                                    ),
+                                  ],
+                                ),
                               ),
-                              const Text(
-                                'Tutoring Session',
-                                style: TextStyle(
-                                    fontSize: 14, fontWeight: FontWeight.w600),
-                              ),
-                              Image.asset('assets/OnlineMeeting.png')
+                              Expanded(
+                                flex: 2,
+                                  child: Image.asset(
+                                'assets/search.png',
+                              ))
                             ],
                           ),
                         ),
@@ -155,7 +185,7 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
             ),
           ),
-          const SessionList(),
+          const SessionList(isStudent:true),
           const SizedBox(height: 16),
           // const Padding(
           //   padding: EdgeInsets.symmetric(horizontal: 16.0,vertical: 8),

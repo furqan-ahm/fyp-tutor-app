@@ -32,6 +32,7 @@ class TutorshipProvider extends ChangeNotifier{
     loading=true;
     notifyListeners();
     var user=AuthProvider.of(context).currentUser;
+    print(user.subjects);
     FirestoreRepository.getSuggestedTutors(user).then((value){
       if(value is List<Tutor>){
         suggestedTutors=value;

@@ -6,6 +6,8 @@ import 'package:tutor_app/models/session_model.dart';
 import 'package:tutor_app/models/tutorship_model.dart';
 import 'package:tutor_app/models/tutorship_offer_model.dart';
 import 'package:tutor_app/models/user_model.dart';
+import '../models/chat_room_model.dart';
+import '../models/message_model.dart';
 import '../models/tutor_model.dart';
 import '../resources/firebase_firestore_collections.dart';
 
@@ -34,8 +36,8 @@ class FirestoreRepository {
 
   static Future<dynamic> createSession(Map<String, dynamic> data) async {
     try {
-      var res=await _firestore.collection('sessions').add(data);
-      var doc=(await res.get());
+      var res = await _firestore.collection('sessions').add(data);
+      var doc = (await res.get());
       return Session.fromMap(doc.id, doc.data()!);
     } catch (e) {
       print(e);
@@ -76,6 +78,82 @@ class FirestoreRepository {
   // static deleteTutorshipOffer(String tutorID, String offerID){
 
   // }
+
+  static Stream<List<Message>> getMessages(String chatId) {
+    return _firestore.collection('chatrooms')
+        .doc(chatId)
+        .collection('messages')
+        .orderBy('time', descending: true)
+        .snapshots()
+        .map((snapshot) =>
+            snapshot.docs.map((e) => Message.fromMap(e.data())).toList());
+  }
+
+  static Future<ChatRoom> createChatRoom(String currentUid, String targetUid) async {
+    //creating unique id that stays same when either of users start the convo
+    String chatId;
+    List<String> memberIds;
+
+    if (currentUid.compareTo(targetUid) > 0) {
+      chatId = currentUid + targetUid;
+      memberIds = [currentUid, targetUid];
+    } else {
+      chatId = targetUid + currentUid;
+      memberIds = [targetUid, currentUid];
+    }
+
+    ChatRoom newRoom = ChatRoom(chatRoomId: chatId, memberIds: memberIds);
+
+    await _firestore.collection('chatrooms').doc(chatId).set(
+      {
+        'chatId': chatId,
+        'memberIds': memberIds,
+      },
+      SetOptions(merge: true),
+    );
+
+    return newRoom;
+  }
+
+  // needs indexing for proper ordering
+  static Stream<List<ChatRoom>> getChatRooms(String uid) {
+    return _firestore.collection('chatrooms')
+        .where('memberIds', arrayContains: uid)
+        .orderBy('lastMessageTime', descending: true)
+        .snapshots()
+        .map((event) => event.docs
+            .map((e) => ChatRoom.fromMap(e.data() as Map<String, dynamic>))
+            .toList());
+  }
+
+  static Future<void> uploadMessage(String chatId, Message message) async {
+    _firestore.collection('chatrooms').doc(chatId).collection('messages').add(message.toMap());
+
+    _firestore.collection('chatrooms').doc(chatId).update({
+      'lastMessage': message.toMap(),
+      'lastMessageTime': message.toMap()['time']
+    });
+  }
+
+  static Future<void> markMessagesRead(
+    String chatId,
+    String uid,
+    Message lastMessage,
+  ) async {
+    _firestore.collection('chatrooms')
+        .doc(chatId)
+        .collection('messages')
+        .where('senderId', isEqualTo: uid)
+        .get()
+        .then((value) => value.docs.forEach((element) {
+              element.reference.update({'unread': false});
+            }));
+
+    if (lastMessage.sender!.uid != uid) return;
+    var mapData = lastMessage.toMap();
+    mapData['unread'] = false;
+    _firestore.collection('chatrooms').doc(chatId).update({'lastMessage': mapData});
+  }
 
   static Future<bool> startTutorship(
       String offerID, AppUser student, AppUser tutor) async {

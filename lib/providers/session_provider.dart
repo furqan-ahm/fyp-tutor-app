@@ -19,6 +19,10 @@ class SessionProvider extends ChangeNotifier {
   final StreamController _rawAnswerStreamController = StreamController();
   final StreamController _rawOfferStreamController = StreamController();
 
+
+
+  int currentParticipants=0;
+
   SessionProvider(){
      _socket=io(
       true?'http://10.0.2.2:3000':'add server here',
@@ -31,17 +35,15 @@ class SessionProvider extends ChangeNotifier {
   }
 
 
-  establishConnection(String id,{Function()? onConnect}){
+  establishConnection(String uid, String session_id,{Function()? onConnect}){
     _socket.onConnect((data){
       print('connected');
-      _socket.emit('set-id', id);
+      _socket.emit('set-config', {'uid':uid,'session_id':session_id});
+
       onConnect!=null?onConnect():null;
     });
     _socket.connect();
   }
-
-
-
 
 
 

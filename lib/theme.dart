@@ -8,7 +8,7 @@ ThemeData theme = ThemeData(
 
   splashColor: primaryColor.withOpacity(0.1),
   primaryColor: primaryColor,
-  scaffoldBackgroundColor: const Color(0xffEBF4FA),
+  scaffoldBackgroundColor: baseColor,
   colorScheme: ColorScheme.fromSwatch().copyWith(
     //the scroll overflow color is this one. (secondary)
     secondary: primaryColor.withOpacity(0.1),

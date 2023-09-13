@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "235621240563",
+    "project_id": "tutorus-75d11",
+    "storage_bucket": "tutorus-75d11.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:235621240563:android:57bbe36b79ab52fc37b186",
+        "android_client_info": {
+          "package_name": "com.example.tutor_app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "235621240563-e2j92dok2sg5lpf7q5bteou07p3oj06t.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAT85vUETcwef70re42U3Br0H9RtVeLr4s"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "235621240563-e2j92dok2sg5lpf7q5bteou07p3oj06t.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

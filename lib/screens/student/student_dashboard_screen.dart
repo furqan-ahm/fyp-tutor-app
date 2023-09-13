@@ -3,30 +3,30 @@ import 'package:ficonsax/ficonsax.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:tutor_app/constants/colors.dart';
-import 'package:tutor_app/providers/auth_provider.dart';
-import 'package:tutor_app/screens/tutor/assignment/assignments_screen.dart';
-import 'package:tutor_app/screens/tutor/home_screen.dart';
+import 'package:tutor_app/screens/student/assignment/assignments_screen.dart';
+import 'package:tutor_app/screens/student/home_screen.dart';
+import 'package:tutor_app/screens/student/tutors/tutor_screen.dart';
 import 'package:tutor_app/screens/tutor/inbox/inbox_screen.dart';
-import 'package:tutor_app/screens/tutor/profile/profile_screen.dart';
+import 'package:tutor_app/screens/student/profile/profile_screen.dart';
 import 'package:tutor_app/screens/tutor/students/students_screen.dart';
-import 'package:tutor_app/widgets/common/custom_appbar.dart';
 import 'package:tutor_app/widgets/drawer/custom_drawer_header.dart';
 
+import '../../providers/auth_provider.dart';
 import '../../widgets/drawer/drawer_item.dart';
 
-class TutorDashboardScreen extends StatefulWidget {
-  const TutorDashboardScreen({Key? key}) : super(key: key);
+class StudentDashboardScreen extends StatefulWidget {
+  const StudentDashboardScreen({Key? key}) : super(key: key);
 
   @override
-  _TutorDashboardScreenState createState() => _TutorDashboardScreenState();
+  _StudentDashboardScreenState createState() => _StudentDashboardScreenState();
 }
 
-class _TutorDashboardScreenState extends State<TutorDashboardScreen> {
+class _StudentDashboardScreenState extends State<StudentDashboardScreen> {
   int currentIndex = 2;
 
   static const List<Widget> screens = [
     InboxScreen(),
-    StudentsScreen(),
+    TutorsScreen(),
     HomeScreen(),
     AssignmentsScreen(),
     ProfileScreen()
@@ -89,7 +89,7 @@ class _TutorDashboardScreenState extends State<TutorDashboardScreen> {
           items: const [
             BottomNavigationBarItem(icon: Icon(Icons.inbox), label: 'Inbox'),
             BottomNavigationBarItem(
-                icon: Icon(Icons.people), label: 'Students'),
+                icon: Icon(Icons.people), label: 'Tutors'),
             BottomNavigationBarItem(
               icon: Icon(
                 IconsaxOutline.home,

@@ -1,16 +1,19 @@
-import 'package:tutor_app/models/user_model.dart';
 
-class ChatRoom{
-  String id;
-  bool seen=false;
-  //String? roomName;
-  //List<AppUser> students;
-  AppUser student;
+import 'message_model.dart';
 
-  //String get name=>roomName??students.fold('', (previousValue, element) => previousValue+element.name+', ');
+class ChatRoom {
+  String? chatRoomId;
+  List<String>? memberIds;
+  Message? lastMessage;
 
+  ChatRoom({this.chatRoomId, this.memberIds});
 
-  //ChatRoom({required this.id, required this.students, this.roomName});
-  ChatRoom({required this.id, required this.student,});
-
+  ChatRoom.fromMap(Map<String, dynamic> mapData) {
+    chatRoomId = mapData['chatId'];
+    memberIds = (mapData['memberIds'] as List<dynamic>)
+        .map((e) => (e as String))
+        .toList();
+    lastMessage =
+        Message.fromMap(mapData['lastMessage'] as Map<String, dynamic>);
+  }
 }
