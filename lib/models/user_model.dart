@@ -20,6 +20,9 @@ class AppUser {
   DateTime? dateOfBirth;
   bool profileFilled;
   String? selectedAddress;
+  int verificationStatus;
+  double rating;
+  double ratingCount;
 
 
   List<String> subjects;
@@ -35,8 +38,6 @@ class AppUser {
 
   bool get isTutor=>!isStudent;
 
-  static isSelectedAddress(String key, String? selectedAddress) =>
-      key == selectedAddress;
 
   String get getProfilePictureURL => profilePictureURL.isNotEmpty
       ? profilePictureURL
@@ -46,9 +47,12 @@ class AppUser {
       {this.uid = '',
       this.name = '',
       this.nickname='',
+      required this.rating,
+      required this.verificationStatus,
       required this.userType,
       required this.numberVerified,
       this.profileFilled=false,
+      required this.ratingCount,
       this.notificationToken,
       // this.address = const {},
       this.email = '',
@@ -65,6 +69,9 @@ class AppUser {
         uid: data['uid'],
         name: data['name'],
         educationLevel: data['education_level']??'',
+        verificationStatus: data['verifiedStatus']??0,
+        ratingCount: data['rateCount']??1,
+        rating: data['rating']??3,
         institute: data['institute']??'',
         subjects: ((data['subjects'] as List?)??[]).map((e) => e.toString()).toList(),
         userType: UserType.values[data['type']],
@@ -118,9 +125,12 @@ class AppUser {
   }) =>
       AppUser(
           uid: uid,
+          rating: rating,
+          ratingCount: ratingCount,
           userType: userType,
           subjects: subjects,
           educationLevel: educationLevel,
+          verificationStatus: verificationStatus,
           institute: institute,
           numberVerified: numberVerified,
           notificationToken: notificationToken,
@@ -138,9 +148,12 @@ class AppUser {
 
 AppUser guestUser = AppUser(
   uid: 'guestuid',
+  rating: 5,
+  ratingCount: 1,
   institute: '',
   educationLevel: '',
   subjects: [],
+  verificationStatus: 0,
   userType: UserType.Student,
   name: 'GUEST ACCOUNT',
   numberVerified: false,

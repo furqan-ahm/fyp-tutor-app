@@ -42,9 +42,28 @@ class _SignInScreenState extends State<SignInScreen> {
                 children: [
                   const Spacer(),
                   const SizedBox(height: 24),
-                  Text(
-                    'Welcome!',
-                    style: Theme.of(context).textTheme.headlineMedium,
+                  Row(
+                    children: [
+                      Image.asset(
+                        'assets/logo.png',
+                        width: MediaQuery.of(context).size.width / 3,
+                      ),
+                      Column(
+                        mainAxisSize: MainAxisSize.min,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text(
+                            'Welcome back!',
+                            style: Theme.of(context).textTheme.headlineMedium?.copyWith(fontSize: 16),
+                          ),
+                          Text(
+                            'TutorUs',
+                            style: Theme.of(context).textTheme.headlineMedium?.copyWith(color: Colors.black, fontWeight: FontWeight.w700),
+                          ),
+                        ],
+                      )
+                    ],
                   ),
                   const SizedBox(height: 24),
                   CustomFormField(
@@ -76,10 +95,11 @@ class _SignInScreenState extends State<SignInScreen> {
                   CustomButton(
                     buttonText: 'Login',
                     fullWidth: true,
-                    onPressed: ()async{
+                    onPressed: () async {
                       if (formKey.currentState!.validate()) {
-                        return await AuthProvider.of(context).signIn(emailCont.text, passCont.text, context, rememberMe: true);
-                        
+                        return await AuthProvider.of(context).signIn(
+                            emailCont.text, passCont.text, context,
+                            rememberMe: true);
                       }
                     },
                   ),
@@ -95,7 +115,10 @@ class _SignInScreenState extends State<SignInScreen> {
                       ),
                       TextButton(
                           onPressed: () {
-                            Navigator.push(context, MaterialPageRoute(builder: (_)=>const SelectRoleScreen()));
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (_) => const SelectRoleScreen()));
                           },
                           child: const Text(
                             "Sign Up",

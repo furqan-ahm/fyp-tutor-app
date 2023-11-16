@@ -24,9 +24,10 @@ class _SelectRoleScreenState extends State<SelectRoleScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: const CustomAppBar(title: 'Select your role',canPop: true, backgroundColor: Colors.transparent,),
       body: Column(
         children: [
+          const CustomAppBar(title: 'Select your role',canPop: true, backgroundColor: Colors.transparent,),
+      
           Expanded(
             child: Container(
               margin: const EdgeInsets.symmetric(

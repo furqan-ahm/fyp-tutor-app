@@ -2,8 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../../constants/colors.dart';
 
-class CustomAppBar extends StatelessWidget with PreferredSizeWidget {
-  @override
+class CustomAppBar extends StatelessWidget {
   final Size preferredSize;
   const CustomAppBar({
     Key? key,

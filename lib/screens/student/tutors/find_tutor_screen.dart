@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:tutor_app/providers/tutorship_provider.dart';
+import 'package:tutor_app/screens/student/tutors/search_result_screen.dart';
 import 'package:tutor_app/theme.dart';
 import 'package:tutor_app/utils/validation_utils.dart';
 import 'package:tutor_app/widgets/assignment/pick_datetime_dialog.dart';
@@ -23,7 +24,10 @@ class FindTutorScreen extends StatefulWidget {
 }
 
 class _FindTutorScreenState extends State<FindTutorScreen> {
-  String? selectedStudent;
+
+
+
+  TextEditingController search=TextEditingController();
 
   @override
   void initState() {
@@ -86,6 +90,7 @@ class _FindTutorScreenState extends State<FindTutorScreen> {
                         CustomFormField(
                           labelText: 'Search Relevant Subject',
                           primaryColor: primaryColor,
+                          controller: search,
                           textColor: Colors.black,
                         ),
                         const SizedBox(
@@ -95,7 +100,11 @@ class _FindTutorScreenState extends State<FindTutorScreen> {
                           height: 20,
                         ),
                         CustomButton(
-                          onPressed: () async {},
+                          onPressed: () async {
+                            if(search.text.isNotEmpty){
+                              Navigator.push(context, MaterialPageRoute(builder:(context) => SearchResultScreen(subject: search.text),));
+                            }
+                          },
                           fullWidth: true,
                           buttonText: 'Search',
                         ),

@@ -11,14 +11,12 @@ import 'package:tutor_app/repository/firebase_storage_repo.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:provider/provider.dart';
 import 'package:tutor_app/screens/auth/sign_in_screen.dart';
 import 'package:tutor_app/screens/getting_started/education_level_screen.dart';
 import 'package:tutor_app/screens/student/student_dashboard_screen.dart';
 import 'package:tutor_app/screens/tutor/tutor_dashboard_screen.dart';
-import '../constants/colors.dart';
 import '../models/user_model.dart';
 import '../repository/firebase_auth_repo.dart';
 import '../utils/utils.dart';
@@ -221,6 +219,7 @@ class AuthProvider extends ChangeNotifier {
 
       return emailAndPasswordCredentials;
     }
+    return null;
   }
 
   Future<bool> updateUserProfile(AppUser user, {String? imgPath}) async {
@@ -311,7 +310,10 @@ class AuthProvider extends ChangeNotifier {
 
       AppUser appUser = AppUser(
         email: email,
+        rating: 3,
+        ratingCount: 1,
         userType: userType,
+        verificationStatus: 0,
         uid: emailAndPasswordCredentials.user?.uid ?? '',
         name: name,
         numberVerified: false,
@@ -360,7 +362,8 @@ class AuthProvider extends ChangeNotifier {
 
 
 
-  Future<dynamic> setEducationDetails(String educationLevel, String institute,List subjects)async{
+  Future<dynamic> setEducationDetails(String educationLevel, String institute,List<String> subjects)async{
+    currentUser.subjects=subjects;
     return await FirestoreRepository.updateAll(uid: currentUser.uid, valueMap: {'education_level':educationLevel, 'subjects':subjects, 'profile_filled':true, 'institute':institute});
   }
 

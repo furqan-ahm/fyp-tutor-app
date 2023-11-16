@@ -9,6 +9,7 @@ class CustomButton extends StatefulWidget {
       this.fullWidth = false,
       this.prefixWidget,
       this.buttonText,
+      this.elevation=2,
       this.height,
       this.backgroundColor,
       this.foregroundColor})
@@ -18,6 +19,7 @@ class CustomButton extends StatefulWidget {
   final String? buttonText;
   final Color? backgroundColor;
   final bool fullWidth;
+  final double elevation;
   final double? height;
   final Widget? prefixWidget;
   final Color? foregroundColor;
@@ -44,7 +46,7 @@ class _CustomButtonState extends State<CustomButton> {
                 });
               },
         style: ButtonStyle(
-          elevation: MaterialStateProperty.all(2),
+          elevation: MaterialStateProperty.all(widget.elevation),
           backgroundColor:
               MaterialStateProperty.all(widget.backgroundColor ?? primaryColor),
           shape: MaterialStateProperty.all(

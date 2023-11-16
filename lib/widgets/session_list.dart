@@ -1,7 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:jitsi_meet_wrapper/jitsi_meet_wrapper.dart';
 import 'package:provider/provider.dart';
+import 'package:tutor_app/providers/auth_provider.dart';
 import 'package:tutor_app/providers/session_provider.dart';
-import 'package:tutor_app/screens/tutor/session_screen.dart';
+import 'package:tutor_app/repository/firebase_firestore_repo.dart';
+import 'package:tutor_app/screens/tutor/sessions/session_screen.dart';
+
+import 'package:flutter/services.dart';
+import 'package:tutor_app/utils/utils.dart';
 
 import '../constants/colors.dart';
 import '../constants/constants.dart';
@@ -18,6 +24,11 @@ class SessionList extends StatefulWidget {
 }
 
 class _SessionListState extends State<SessionList> {
+
+
+
+  SessionProvider get sessionProv=>Provider.of<SessionProvider>(context, listen: false);
+
   @override
   Widget build(BuildContext context) {
     return StreamBuilder<List<Session>>(
@@ -39,8 +50,8 @@ class _SessionListState extends State<SessionList> {
                       children: [
                         TextSpan(
                             text: widget.isStudent
-                                ? ' will appear here a meeting is scheduled.'
-                                : ' will appear here a meeting is scheduled.',
+                                ? ' will appear here when a meeting is scheduled or live.'
+                                : ' will appear here when a meeting is scheduled or started.',
                             style: const TextStyle(color: Colors.black)),
                       ]),
                 ));
@@ -87,9 +98,7 @@ class _SessionListState extends State<SessionList> {
                                 )
                               : const SizedBox.shrink(),
                           const Spacer(),
-                          widget.isStudent
-                              ? const SizedBox.shrink()
-                              : MenuAnchor(
+                          MenuAnchor(
                                   builder: (BuildContext context,
                                       MenuController controller,
                                       Widget? child) {
@@ -107,11 +116,15 @@ class _SessionListState extends State<SessionList> {
                                   },
                                   menuChildren: [
                                       MenuItemButton(
-                                        onPressed: () {},
-                                        child: const Text('Postpone'),
+                                        onPressed: relevantSessions[index].isLive?() {
+                                          Clipboard.setData(ClipboardData(text: relevantSessions[index].id)).then((value) => Utils.showSnackbar('Meeting Code Copied!', context));
+                                        }:null,
+                                        child: const Text('Copy Meeting Code'),
                                       ),
-                                      MenuItemButton(
-                                        onPressed: () {},
+                                      widget.isStudent?const SizedBox.shrink():MenuItemButton(
+                                        onPressed: () {
+                                          FirestoreRepository.cancelSession(relevantSessions[index].id);
+                                        },
                                         child: const Text('Cancel/End'),
                                       ),
                                     ]),
@@ -156,17 +169,16 @@ class _SessionListState extends State<SessionList> {
                               ),
                             ],
                           ),
-                          relevantSessions[index].isLive
+                          relevantSessions[index].isLive ||
+                                  (!widget.isStudent &&
+                                      relevantSessions[index].isActiveTime)
                               ? FloatingActionButton.extended(
                                   onPressed: () {
-                                    Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                          builder: (context) => SessionScreen(
-                                              session: relevantSessions[index]),
-                                        ));
+                                    sessionProv.joinMeeting(relevantSessions[index], AuthProvider.of(context).currentUser);
                                   },
-                                  label: const Text(' Join '),
+                                  label: widget.isStudent
+                                      ? const Text(' Join ')
+                                      : const Text('Start'),
                                   elevation: 0,
                                   heroTag: relevantSessions[index].id,
                                 )

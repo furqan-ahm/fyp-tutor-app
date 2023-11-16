@@ -29,7 +29,7 @@ class Utils {
 
 
   static Future<PlatformFile?> pickFile({bool forSession=false})async{
-    var res=await FilePicker.platform.pickFiles(allowMultiple: false, type: FileType.custom  , allowedExtensions: ['pdf','ppt','pptx']);
+    var res=await FilePicker.platform.pickFiles(allowMultiple: false, type: FileType.any);
     return res?.files.first;
   }
 

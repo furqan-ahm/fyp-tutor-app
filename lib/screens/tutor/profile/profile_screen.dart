@@ -5,6 +5,7 @@ import 'package:provider/provider.dart';
 import 'package:tutor_app/models/user_model.dart';
 import 'package:tutor_app/providers/auth_provider.dart';
 import 'package:tutor_app/screens/common/edit_profile_screen.dart';
+import 'package:tutor_app/screens/tutor/profile/verification_screen.dart';
 
 import '../../../constants/colors.dart';
 import '../../../theme.dart';
@@ -78,7 +79,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
           ),
           ListTile(
             onTap: () {
-             
+             Navigator.push(context, MaterialPageRoute(builder:(context) => const VerificationScreen(),));
             },
             leading: const Icon(
               IconsaxOutline.verify,
@@ -91,21 +92,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
             ),
             trailing: const Icon(Icons.arrow_forward_ios_rounded),
           ),
-          ListTile(
-            onTap: () {
-              
-            },
-            leading: const Icon(
-              IconsaxOutline.money_2,
-              color: primaryColor,
-            ),
-            title: Text(
-              'Earnings',
-              style: theme.textTheme.headlineSmall
-                  ?.copyWith(fontWeight: FontWeight.w600),
-            ),
-            trailing: const Icon(Icons.arrow_forward_ios_rounded),
-          ),
+          
           // ListTile(
           //   onTap: (){},
           //   leading: const Icon(IconsaxOutline.message_question, color: primaryColor,),
@@ -114,14 +101,14 @@ class _ProfileScreenState extends State<ProfileScreen> {
           // ),
           ListTile(
             onTap: () {
-             
+             AuthProvider.of(context).signOut(context);
             },
             leading: const Icon(
-              IconsaxOutline.people,
+              IconsaxOutline.logout,
               color: primaryColor,
             ),
             title: Text(
-              'Invite Friends',
+              'Log Out',
               style: theme.textTheme.headlineSmall
                   ?.copyWith(fontWeight: FontWeight.w600),
             ),
@@ -130,7 +117,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
           const SizedBox(
             height: 5,
           ),
-          
         ],
       ),
     );

@@ -4,6 +4,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'package:tutor_app/models/user_model.dart';
 import 'package:tutor_app/screens/common/edit_profile_screen.dart';
+import 'package:tutor_app/screens/getting_started/education_level_screen.dart';
 
 import '../../../constants/colors.dart';
 import '../../../providers/auth_provider.dart';
@@ -73,31 +74,19 @@ class _ProfileScreenState extends State<ProfileScreen> {
             trailing: const Icon(Icons.arrow_forward_ios_rounded),
           ),
           ListTile(
-            onTap: () {},
+            onTap: () {Navigator.push(context, MaterialPageRoute(builder:(context) => EducationLevelScreen(selectedRole: user.userType),));},
             leading: const Icon(
               IconsaxOutline.card_edit,
               color: primaryColor,
             ),
             title: Text(
-              'Edit Education Details',
+              'Re-add Education Details',
               style: theme.textTheme.headlineSmall
                   ?.copyWith(fontWeight: FontWeight.w600),
             ),
             trailing: const Icon(Icons.arrow_forward_ios_rounded),
           ),
-          ListTile(
-            onTap: () {},
-            leading: const Icon(
-              IconsaxOutline.money_2,
-              color: primaryColor,
-            ),
-            title: Text(
-              'Billing',
-              style: theme.textTheme.headlineSmall
-                  ?.copyWith(fontWeight: FontWeight.w600),
-            ),
-            trailing: const Icon(Icons.arrow_forward_ios_rounded),
-          ),
+          
           // ListTile(
           //   onTap: (){},
           //   leading: const Icon(IconsaxOutline.message_question, color: primaryColor,),
@@ -105,13 +94,15 @@ class _ProfileScreenState extends State<ProfileScreen> {
           //   trailing: const Icon(Icons.arrow_forward_ios_rounded),
           // ),
           ListTile(
-            onTap: () {},
+            onTap: () {
+              AuthProvider.of(context).signOut(context);
+            },
             leading: const Icon(
-              IconsaxOutline.people,
+              IconsaxOutline.logout,
               color: primaryColor,
             ),
             title: Text(
-              'Invite Friends',
+              'Logout',
               style: theme.textTheme.headlineSmall
                   ?.copyWith(fontWeight: FontWeight.w600),
             ),

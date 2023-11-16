@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:tutor_app/constants/colors.dart';
+import 'package:tutor_app/providers/auth_provider.dart';
+import 'package:tutor_app/screens/student/assignment/assignments_review.dart';
 import 'package:tutor_app/screens/student/tutors/find_tutor_screen.dart';
 import 'package:tutor_app/widgets/session_list.dart';
 
@@ -37,20 +40,48 @@ class _HomeScreenState extends State<HomeScreen> {
                             horizontal: 8, vertical: 4),
                         child: AspectRatio(
                           aspectRatio: 17 / 12,
+                          child: Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Center(
+                                child: RichText(
+                                  text: TextSpan(
+                                      text: 'Welcome back!',
+                                      style: const TextStyle(
+                                          fontSize: 20,
+                                          fontWeight: FontWeight.w700,
+                                          color: Colors.black),
+                                      children: [
+                                        TextSpan(
+                                            text: Provider.of<AuthProvider>(context).currentUser.name.split(' ').first,
+                                            style: const TextStyle(
+                                                color: primaryColor,
+                                                fontSize: 18)),
+                                      ]),
+                                ),
+                              )),
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 8, vertical: 4),
+                        child: AspectRatio(
+                          aspectRatio: 17 / 12,
                           child: Material(
                             borderRadius: BorderRadius.circular(8),
                             elevation: 4,
                             child: InkWell(
                               borderRadius: BorderRadius.circular(8),
-                              onTap: () {},
+                              onTap: () {
+                                Navigator.push(context, MaterialPageRoute(builder:(context) => const AssignmentsReview(),));
+                              },
                               child: Row(
                                 children: [
-                                  Expanded(
+                                  const Expanded(
                                     child: Center(
                                       child: Column(
                                         mainAxisAlignment:
                                             MainAxisAlignment.center,
-                                        children: const [
+                                        children: [
                                           Text(
                                             'Review',
                                             style: TextStyle(
@@ -77,49 +108,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           ),
                         ),
                       ),
-                      Padding(
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 8, vertical: 4),
-                        child: AspectRatio(
-                          aspectRatio: 17 / 12,
-                          child: Material(
-                            borderRadius: BorderRadius.circular(8),
-                            elevation: 4,
-                            child: InkWell(
-                              borderRadius: BorderRadius.circular(8),
-                              onTap: () {},
-                              child: Row(
-                                children: [
-                                  Expanded(
-                                    child: Center(
-                                      child: Column(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.center,
-                                        children: const [
-                                          Text(
-                                            'Join a',
-                                            style: TextStyle(
-                                                fontSize: 14,
-                                                fontWeight: FontWeight.w600),
-                                          ),
-                                          Text(
-                                            'Quiz',
-                                            style: TextStyle(
-                                                fontSize: 14,
-                                                fontWeight: FontWeight.w600),
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                  ),
-                                  Expanded(
-                                      child: Image.asset('assets/Quiz.png'))
-                                ],
-                              ),
-                            ),
-                          ),
-                        ),
-                      ),
+                      
                     ],
                   ),
                 ),
@@ -140,10 +129,10 @@ class _HomeScreenState extends State<HomeScreen> {
                           child: Column(
                             mainAxisAlignment: MainAxisAlignment.end,
                             children: [
-                              Expanded(
+                              const Expanded(
                                 child: Column(
                                   mainAxisAlignment: MainAxisAlignment.end,
-                                  children: const [
+                                  children: [
                                     Text(
                                       'Look for',
                                       style: TextStyle(

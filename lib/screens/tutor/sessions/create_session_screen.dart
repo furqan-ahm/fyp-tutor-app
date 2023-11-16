@@ -11,7 +11,7 @@ import 'package:provider/provider.dart';
 import 'package:tutor_app/providers/auth_provider.dart';
 import 'package:tutor_app/providers/session_provider.dart';
 import 'package:tutor_app/providers/tutorship_provider.dart';
-import 'package:tutor_app/screens/tutor/session_screen.dart';
+import 'package:tutor_app/screens/tutor/sessions/session_screen.dart';
 import 'package:tutor_app/theme.dart';
 import 'package:tutor_app/utils/utils.dart';
 import 'package:tutor_app/utils/validation_utils.dart';
@@ -25,9 +25,9 @@ import 'dart:io';
 import 'package:http/http.dart' as http;
 import 'package:http_parser/http_parser.dart';
 
-import '../../../constants/colors.dart';
-import '../../models/session_model.dart';
-import '../../models/user_model.dart';
+import '../../../../constants/colors.dart';
+import '../../../models/session_model.dart';
+import '../../../models/user_model.dart';
 
 class CreateSessionScreen extends StatefulWidget {
   const CreateSessionScreen({Key? key}) : super(key: key);
@@ -51,10 +51,9 @@ class _CreateSessionScreenState extends State<CreateSessionScreen> {
   File? convertedFile;
 
   TextEditingController titleCont = TextEditingController();
-  
+
   TextEditingController durationCont = TextEditingController(text: '60');
   TextEditingController sessionTime = TextEditingController(text: '');
-
 
   @override
   void initState() {
@@ -68,76 +67,86 @@ class _CreateSessionScreenState extends State<CreateSessionScreen> {
     });
   }
 
+  // attachFile() async {
+  //   var file = await Utils.pickFile();
+  //   if (file == null) {
+  //     return;
+  //   }
+  //   if (file.extension == 'pdf') {
+  //     setState(() {
+  //       attachedFile = file;
+  //       convertedFile = File(file.path!);
+  //     });
+  //     return;
+  //   }
+
+  //   setState(() {
+  //     attachedFile = file;
+  //     loadingMedia = true;
+  //   });
+  //   try {
+  //     final request = http.MultipartRequest(
+  //       'POST',
+  //       Uri.parse('https://api.pspdfkit.com/build'),
+  //     );
+
+  //     final instructions = {
+  //       "parts": [
+  //         {
+  //           "file": "document",
+  //         },
+  //       ],
+  //     };
+
+  //     request.headers['Authorization'] =
+  //         'Bearer pdf_live_SWM8owlRqAjaXQTI29Golhwj3a5FLKojPwJUAGq0Xof';
+  //     request.fields['instructions'] = json.encode(instructions);
+  //     request.files.add(
+  //       await http.MultipartFile.fromPath(
+  //         'document',
+  //         file.path!,
+  //         contentType: MediaType('application',
+  //             'vnd.openxmlformats-officedocument.presentationml.presentation'),
+  //       ),
+  //     );
+
+  //     final response = await request.send();
+
+  //     if (response.statusCode == 200) {
+  //       final appDocumentsDir = await getApplicationDocumentsDirectory();
+
+  //       final outputFile = File('${appDocumentsDir.path}/result.pdf');
+  //       await response.stream.pipe(outputFile.openWrite());
+  //       print('File downloaded successfully.');
+  //       setState(() {
+  //         convertedFile = outputFile;
+  //         loadingMedia = false;
+  //       });
+  //     } else {
+  //       print('Failed to fetch PDF: ${response.statusCode}');
+  //       print(await response.stream.bytesToString());
+  //       setState(() {
+  //         attachedFile = null;
+  //         loadingMedia = false;
+  //       });
+  //     }
+  //   } catch (e) {
+  //     setState(() {
+  //       attachedFile = null;
+  //       loadingMedia = false;
+  //     });
+  //     print('Error: $e');
+  //   }
+  // }
+
   attachFile() async {
     var file = await Utils.pickFile();
     if (file == null) {
       return;
     }
-    if (file.extension == 'pdf') {
-      setState(() {
-        attachedFile = file;
-        convertedFile = File(file.path!);
-      });
-      return;
-    }
-
     setState(() {
-      attachedFile = file;
-      loadingMedia = true;
+      convertedFile = File(file.path!);
     });
-    try {
-      final request = http.MultipartRequest(
-        'POST',
-        Uri.parse('https://api.pspdfkit.com/build'),
-      );
-
-      final instructions = {
-        "parts": [
-          {
-            "file": "document",
-          },
-        ],
-      };
-
-      request.headers['Authorization'] =
-          'Bearer pdf_live_SWM8owlRqAjaXQTI29Golhwj3a5FLKojPwJUAGq0Xof';
-      request.fields['instructions'] = json.encode(instructions);
-      request.files.add(
-        await http.MultipartFile.fromPath(
-          'document',
-          file.path!,
-          contentType: MediaType('application',
-              'vnd.openxmlformats-officedocument.presentationml.presentation'),
-        ),
-      );
-
-      final response = await request.send();
-
-      if (response.statusCode == 200) {
-        final appDocumentsDir = await getApplicationDocumentsDirectory();
-
-        final outputFile = File('${appDocumentsDir.path}/result.pdf');
-        await response.stream.pipe(outputFile.openWrite());
-        print('File downloaded successfully.');
-        setState(() {
-          convertedFile = outputFile;
-          loadingMedia = false;
-        });
-      } else {
-        print('Failed to fetch PDF: ${response.statusCode}');
-        print(await response.stream.bytesToString());
-        setState(() {
-          attachedFile = null;
-          loadingMedia = false;
-        });
-      }
-    } catch (e) {
-      setState(() {
-        attachedFile = null;
-        loadingMedia = false;
-      });
-      print('Error: $e');
-    }
   }
 
   @override
@@ -243,7 +252,9 @@ class _CreateSessionScreenState extends State<CreateSessionScreen> {
                         CustomFormField(
                           labelText: 'Meeting Duration (in minutes)',
                           controller: durationCont,
-                          textInputFormatters: [FilteringTextInputFormatter.allow(RegExp(r'\d+')),],
+                          textInputFormatters: [
+                            FilteringTextInputFormatter.allow(RegExp(r'\d+')),
+                          ],
                         ),
                         const SizedBox(
                           height: 10,
@@ -259,11 +270,12 @@ class _CreateSessionScreenState extends State<CreateSessionScreen> {
                                         context: context,
                                         builder: (context) =>
                                             const PickDatetimeDialog(),
-                                      ).then((value){
-                                        if(value is DateTime){
+                                      ).then((value) {
+                                        if (value is DateTime) {
                                           setState(() {
-                                            sessionDate=value;
-                                            sessionTime.text='${value.hour.toString().padLeft(2, '0')}:${value.minute.toString().padLeft(2, '0')}, ${value.day}-${value.month}-${value.year}';
+                                            sessionDate = value;
+                                            sessionTime.text =
+                                                '${value.hour.toString().padLeft(2, '0')}:${value.minute.toString().padLeft(2, '0')}, ${value.day}-${value.month}-${value.year}';
                                           });
                                         }
                                       });
@@ -292,17 +304,17 @@ class _CreateSessionScreenState extends State<CreateSessionScreen> {
                         const SizedBox(
                           height: 20,
                         ),
-                        CustomButton(
-                          onPressed: () async {
-                            attachFile();
-                          },
-                          prefixWidget: const Icon(
-                            Icons.attach_file,
-                            size: 16,
-                          ),
-                          fullWidth: true,
-                          buttonText: 'Attach PPT/PDF',
-                        ),
+                        // CustomButton(
+                        //   onPressed: () async {
+                        //     attachFile();
+                        //   },
+                        //   prefixWidget: const Icon(
+                        //     Icons.attach_file,
+                        //     size: 16,
+                        //   ),
+                        //   fullWidth: true,
+                        //   buttonText: 'Attach PPT/PDF',
+                        // ),
                       ],
                     ),
                   ),
@@ -310,54 +322,6 @@ class _CreateSessionScreenState extends State<CreateSessionScreen> {
                 const SizedBox(
                   height: 5,
                 ),
-                attachedFile != null
-                    ? Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 20.0),
-                        child: Material(
-                          borderRadius: BorderRadius.circular(11),
-                          color: greyButtonColor,
-                          elevation: 2,
-                          child: Padding(
-                              padding: const EdgeInsets.all(12.0),
-                              child: Column(
-                                children: [
-                                  Row(
-                                    children: [
-                                      const Icon(
-                                        IconsaxOutline.document,
-                                        color: Colors.green,
-                                      ),
-                                      const SizedBox(
-                                        width: 4,
-                                      ),
-                                      Text(
-                                        attachedFile!.name,
-                                        overflow: TextOverflow.ellipsis,
-                                      ),
-                                      const Spacer(),
-                                      loadingMedia
-                                          ? const SizedBox(
-                                              width: 24,
-                                              height: 24,
-                                              child: CircularProgressIndicator(
-                                                strokeWidth: 2,
-                                              ))
-                                          : GestureDetector(
-                                              onTap: () {
-                                                setState(() {
-                                                  attachedFile = null;
-                                                  convertedFile = null;
-                                                });
-                                              },
-                                              child: const Icon(Icons.close),
-                                            )
-                                    ],
-                                  ),
-                                ],
-                              )),
-                        ),
-                      )
-                    : const SizedBox.shrink(),
                 const Spacer(),
                 Padding(
                   padding: const EdgeInsets.symmetric(
@@ -367,32 +331,39 @@ class _CreateSessionScreenState extends State<CreateSessionScreen> {
                         scheduleLater ? 'Confirm Schedule' : 'Start Session',
                     fullWidth: true,
                     onPressed: () async {
-
-                      if(titleCont.text.isEmpty||durationCont.text.isEmpty||selectedStudent==null){
-                        Utils.showSnackbar('Please fill all fields before proceeding', context);
+                      if (titleCont.text.isEmpty ||
+                          durationCont.text.isEmpty ||
+                          selectedStudent == null) {
+                        Utils.showSnackbar(
+                            'Please fill all fields before proceeding',
+                            context);
                         return false;
                       }
 
-                      if(sessionDate!=null&&sessionDate!.isBefore(DateTime.now())){
-                        Utils.showSnackbar('You can not schedule a meeting in the past', context);
+                      if (sessionDate != null &&
+                          sessionDate!.isBefore(DateTime.now())) {
+                        Utils.showSnackbar(
+                            'You can not schedule a meeting in the past',
+                            context);
                         return false;
                       }
 
                       if (!loadingMedia) {
-                          var result=await Provider.of<SessionProvider>(context,
+                        var result = await Provider.of<SessionProvider>(context,
                                 listen: false)
                             .createSession(
                                 titleCont.text,
                                 selectedStudent!,
-                                attachedFile != null
-                                    ? {attachedFile!.name: convertedFile}
-                                    : {},
                                 AuthProvider.of(context).currentUser,
-                                sessionDate??DateTime.now(), int.parse(durationCont.text));
-                          if(!scheduleLater && result is Session){
-                            Navigator.pushReplacement(context, MaterialPageRoute(builder:(context) => SessionScreen(session: result),));
-                            return true;
-                          }
+                                sessionDate ?? DateTime.now(),
+                                int.parse(durationCont.text));
+                        if (!scheduleLater && result is Session) {
+                          Navigator.pop(context);
+                          Provider.of<SessionProvider>(context, listen: false)
+                              .joinMeeting(
+                                  result, AuthProvider.of(context).currentUser);
+                          return true;
+                        }
                         Navigator.pop(context);
                         return true;
                       }

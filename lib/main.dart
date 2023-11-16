@@ -1,17 +1,14 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:tutor_app/models/user_model.dart';
 import 'package:tutor_app/providers/auth_provider.dart';
 import 'package:tutor_app/providers/session_provider.dart';
 import 'package:tutor_app/providers/tutorship_provider.dart';
 import 'package:tutor_app/providers/user_state_provider.dart';
 import 'package:tutor_app/screens/auth/sign_in_screen.dart';
-import 'package:tutor_app/screens/getting_started/education_level_screen.dart';
-import 'package:tutor_app/screens/tutor/tutor_dashboard_screen.dart';
 
 import 'firebase_options.dart';
-import 'screens/student/student_dashboard_screen.dart';
+import 'providers/assignment_provider.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -40,6 +37,9 @@ class MyApp extends StatelessWidget {
         ),
         ChangeNotifierProvider<SessionProvider>(
           create: (context) => SessionProvider(), lazy: false,
+        ),
+        ChangeNotifierProvider<AssignmentProvider>(
+          create: (context) => AssignmentProvider(),
         ),
       ],
       child: MaterialApp(

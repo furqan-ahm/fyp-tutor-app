@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:tutor_app/constants/colors.dart';
 import 'package:tutor_app/providers/auth_provider.dart';
-import 'package:tutor_app/screens/tutor/create_session_screen.dart';
+import 'package:tutor_app/screens/tutor/sessions/create_session_screen.dart';
+import 'package:tutor_app/screens/tutor/sessions/session_history_screen.dart';
 import 'package:tutor_app/widgets/session_list.dart';
 
 import '../../widgets/common/custom_appbar.dart';
@@ -70,7 +71,9 @@ class _HomeScreenState extends State<HomeScreen> {
                             elevation: 4,
                             child: InkWell(
                               borderRadius: BorderRadius.circular(8),
-                              onTap: () {},
+                              onTap: () {
+                                Navigator.of(context).push(MaterialPageRoute(builder:(context) => const SessionHistoryScreen(),));
+                              },
                               child: Row(
                                 children: [
                                   Expanded(
@@ -80,13 +83,13 @@ class _HomeScreenState extends State<HomeScreen> {
                                             MainAxisAlignment.center,
                                         children: const [
                                           Text(
-                                            'Create a',
+                                            'Session',
                                             style: TextStyle(
                                                 fontSize: 14,
                                                 fontWeight: FontWeight.w600),
                                           ),
                                           Text(
-                                            'Quiz',
+                                            'History',
                                             style: TextStyle(
                                                 fontSize: 14,
                                                 fontWeight: FontWeight.w600),
